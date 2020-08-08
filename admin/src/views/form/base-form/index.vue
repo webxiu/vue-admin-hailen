@@ -3,7 +3,6 @@
     <BaseForm :form-congfig="formCongfig" />
 
     <Button @click="getMixin">获取mixin</Button>
-
     <div>
       <p>
         上传预览:
@@ -93,6 +92,7 @@ export default {
       console.log("this", this);
     },
     // 多图片预览
+
     change(e) {
       const files = e.target.files;
       if (files[0]) {

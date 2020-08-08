@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="article_content" v-highlight>
+    <div v-highlight class="article_content">
       <pre>
-        <code v-html="html" class="font"></code>
+        <code class="font" v-html="html" />
       </pre>
     </div>
-    <div class="article_content" v-highlight>
+    <div v-highlight class="article_content">
       <pre>
-        <code v-html="html2" class="font"></code>
+        <code class="font" v-html="html2" />
       </pre>
     </div>
   </div>
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "HeightLight",
+  name: 'HeightLight',
   data() {
     return {
       html: `
@@ -121,9 +121,9 @@ export default {
              &lt;/body&gt;
              &lt;/html&gt;
         `
-    };
+    }
   }
-};
+}
 </script>
 <style scoped>
 .article_content {

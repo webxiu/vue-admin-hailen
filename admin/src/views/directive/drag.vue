@@ -13,9 +13,10 @@ import data from '../../../../../Project/vue-admin-ts/src/views/pdf/content';
       <span>这是一段信息: 拖拽标题</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button
+          type="primary"
+          @click="dialogVisible = false"
+        >确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -23,21 +24,21 @@ import data from '../../../../../Project/vue-admin-ts/src/views/pdf/content';
 
 <script>
 export default {
-  name: "DragDirective",
+  name: 'DragDirective',
   data() {
     return {
       dialogVisible: false
-    };
+    }
   },
   methods: {
     showDialog() {
-      this.dialogVisible = true;
+      this.dialogVisible = true
     },
     handleClose() {
-      this.dialogVisible = false;
+      this.dialogVisible = false
     }
   }
-};
+}
 </script>
 
 <style></style>

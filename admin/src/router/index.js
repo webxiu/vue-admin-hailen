@@ -1,21 +1,21 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue'
+import Router from 'vue-router'
 
-Vue.use(Router);
+Vue.use(Router)
 
-import Layout from "@/layout";
+import Layout from '@/layout'
 
-import defaultRoutes from "./defaultRoutes";
+import defaultRoutes from './defaultRoutes'
 
-const modulesFiles = require.context("./modules", true, /\.js$/);
+const modulesFiles = require.context('./modules', true, /\.js$/)
 const routerModules = modulesFiles.keys().reduce((modules, modulePath) => {
   // set './app.js' => 'app'
   // const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
-  const value = modulesFiles(modulePath);
+  const value = modulesFiles(modulePath)
   // modules[moduleName] = value.default
-  modules.push(value.default);
-  return modules;
-}, []);
+  modules.push(value.default)
+  return modules
+}, [])
 
 /**
  * 提示: 子菜单仅在路由 children.length >= 1 时出现
@@ -44,50 +44,50 @@ const routerModules = modulesFiles.keys().reduce((modules, modulePath) => {
  */
 export const constantRoutes = [
   {
-    path: "/redirect",
+    path: '/redirect',
     component: Layout,
     hidden: true,
     children: [
       {
-        path: "/redirect/:path(.*)",
-        component: () => import("@/views/redirect/index")
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index')
       }
     ]
   },
   {
-    path: "/login",
-    component: () => import("@/views/login/index"),
+    path: '/login',
+    component: () => import('@/views/login/index'),
     hidden: true
   },
   {
-    path: "/auth-redirect",
-    component: () => import("@/views/login/auth-redirect"),
+    path: '/auth-redirect',
+    component: () => import('@/views/login/auth-redirect'),
     hidden: true
   },
   {
-    path: "/404",
-    component: () => import("@/views/error-page/404"),
+    path: '/404',
+    component: () => import('@/views/error-page/404'),
     hidden: true
   },
   {
-    path: "/401",
-    component: () => import("@/views/error-page/401"),
+    path: '/401',
+    component: () => import('@/views/error-page/401'),
     hidden: true
   },
   {
-    path: "/",
+    path: '/',
     component: Layout,
-    redirect: "/dashboard",
+    redirect: '/dashboard',
     children: [
       {
-        path: "dashboard",
-        component: () => import("@/views/dashboard/index"),
-        name: "Dashboard",
-        meta: { title: "首页", icon: "dashboard", affix: true }
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   }
-];
+]
 
 /**
  * 异步路由Routes
@@ -98,99 +98,99 @@ export const asyncRoutes = [
   ...routerModules,
 
   {
-    path: "/permission",
+    path: '/permission',
     component: Layout,
-    redirect: "/permission/page",
+    redirect: '/permission/page',
     alwaysShow: true, // 将总是显示根菜单
-    name: "Permission",
+    name: 'Permission',
     meta: {
-      title: "权限",
-      icon: "lock",
-      roles: ["admin", "editor"] // 你可以在根导航中设置角色
+      title: '权限',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // 你可以在根导航中设置角色
     },
     children: [
       {
-        path: "page",
-        component: () => import("@/views/default/permission/page"),
-        name: "PagePermission",
+        path: 'page',
+        component: () => import('@/views/default/permission/page'),
+        name: 'PagePermission',
         meta: {
-          title: "页面权限",
-          roles: ["admin"] // 或者只能在子导航中设置角色
+          title: '页面权限',
+          roles: ['admin'] // 或者只能在子导航中设置角色
         }
       },
       {
-        path: "directive",
-        component: () => import("@/views/default/permission/directive"),
-        name: "DirectivePermission",
+        path: 'directive',
+        component: () => import('@/views/default/permission/directive'),
+        name: 'DirectivePermission',
         meta: {
-          title: "指令权限"
+          title: '指令权限'
           // 如果不设置角色，则表示:此页面不需要权限
         }
       },
       {
-        path: "role",
-        component: () => import("@/views/default/permission/role"),
-        name: "RolePermission",
+        path: 'role',
+        component: () => import('@/views/default/permission/role'),
+        name: 'RolePermission',
         meta: {
-          title: "角色权限",
-          roles: ["admin"]
+          title: '角色权限',
+          roles: ['admin']
         }
       }
     ]
   },
   {
-    path: "/error",
+    path: '/error',
     component: Layout,
-    redirect: "noRedirect",
-    name: "ErrorPages",
-    meta: { title: "错误页面", icon: "404" },
+    redirect: 'noRedirect',
+    name: 'ErrorPages',
+    meta: { title: '错误页面', icon: '404' },
     children: [
       {
-        path: "401",
-        component: () => import("@/views/error-page/401"),
-        name: "Page401",
-        meta: { title: "401", noCache: true }
+        path: '401',
+        component: () => import('@/views/error-page/401'),
+        name: 'Page401',
+        meta: { title: '401', noCache: true }
       },
       {
-        path: "404",
-        component: () => import("@/views/error-page/404"),
-        name: "Page404",
-        meta: { title: "404", noCache: true }
+        path: '404',
+        component: () => import('@/views/error-page/404'),
+        name: 'Page404',
+        meta: { title: '404', noCache: true }
       }
     ]
   },
 
   {
-    path: "/error-log",
+    path: '/error-log',
     component: Layout,
     children: [
       {
-        path: "log",
-        component: () => import("@/views/error-log/index"),
-        name: "ErrorLog",
-        meta: { title: "错误日志", icon: "bug" }
+        path: 'log',
+        component: () => import('@/views/error-log/index'),
+        name: 'ErrorLog',
+        meta: { title: '错误日志', icon: 'bug' }
       }
     ]
   },
   // 项目默认存在的路由页面
   ...defaultRoutes,
   // 404 页面必须放在末尾！！！
-  { path: "*", redirect: "/404", hidden: true }
-];
+  { path: '*', redirect: '/404', hidden: true }
+]
 
 const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
     routes: constantRoutes
-  });
+  })
 
-const router = createRouter();
+const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter();
-  router.matcher = newRouter.matcher; // reset router
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher // reset router
 }
 
-export default router;
+export default router
