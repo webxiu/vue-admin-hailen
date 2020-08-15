@@ -1,6 +1,5 @@
 <template>
   <div>
-    999
     <el-table
       :data="tableData"
       :border="propConfig.border"

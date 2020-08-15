@@ -16,6 +16,12 @@ const tableRouter = {
       meta: { title: '配置表格' }
     },
     {
+      path: 'tree-table',
+      component: () => import('@/views/table/tree-table'),
+      name: 'TreeTable',
+      meta: { title: '表格树' }
+    },
+    {
       path: 'dynamic-table',
       component: () => import('@/views/table/dynamic-table'),
       name: 'DynamicTable',
