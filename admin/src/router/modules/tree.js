@@ -20,7 +20,7 @@ const treeRouter = {
       component: () => import('@/views/tree/custom'),
       name: 'CustomTree',
       meta: { title: '数据组合树' }
-    },
+    }
   ]
 }
 export default treeRouter
