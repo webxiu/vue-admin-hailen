@@ -1,43 +1,21 @@
 import createLogger from 'vuex/dist/logger';
 <template>
   <div class="app-container tree-table">
-    <el-table
-      ref="treeTableRef"
-      :data="tableData"
-      row-key="id"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      @expand-change="expandChange"
-      @select-all="selectAll"
-      @select="select"
-    >
-      <el-table-column
-        v-for="column in columnConfig"
-        :key="column.prop"
-        :prop="column.prop"
-        :label="column.label"
-        :min-width="column.minWidth"
-        :width="column.width"
-        :formatter="column.render"
-        :sortable="column.sortable"
-        :type="column.type"
-        :fixed="column.fixed"
-        :align="column.align"
-        :class-name="column.className"
-        :header-align="column.headerAlign"
-        :show-overflow-tooltip="true"
-      />
-    </el-table>
+    <SelectTable :table-data="tableData" :column-config="columnConfig" :tree-props="treeProps" />
   </div>
 </template>
 
 <script>
+import SelectTable from '../components/SelectTable'
 export default {
   name: 'TreeTable',
+  components: {
+    SelectTable
+  },
   data() {
+    const self = this
     return {
-      isSelectAll: false,
-      p: [],
-      c: [],
+      treeProps: { children: 'children', hasChildren: 'hasChildren' },
       tableData: [
         {
           id: 1,
@@ -149,61 +127,36 @@ export default {
         }
       ],
       columnConfig: [
-        { type: 'selection', minWidth: '50', align: 'center' },
-        { prop: 'date', label: '日期', minWidth: '100' },
+        {
+          type: 'selection',
+          minWidth: '50',
+          align: 'center',
+          selectable: function(row, index) {
+            // console.log('this', row, index, self)
+            let flag = true
+            for (let i = 0; i < self.tableData.length; i++) {
+              if (
+                row.parentId !== 0 &&
+                row.selected === true &&
+                row.child != 'child'
+              ) {
+                flag = false
+              }
+            }
+            return flag
+          }
+        },
+        { prop: 'date', label: '日期', minWidth: '100', handle: function() {
+          console.log('arguments', arguments)
+        } },
         { prop: 'name', label: '姓名', minWidth: '100' },
         { prop: 'address', label: '地址', minWidth: '100' }
       ]
     }
   },
-  methods: {
-    expandChange(row, open) {
-      console.log('expandChange===>:', row, open)
-    },
-    select(select, row) {
-      const children = row.children
-      if (children) {
-        this.getChildren(children, row, 'one')
-      } else {
-        console.log('叶子ID===>:', row.id)
-      }
-    },
-    getChildren(children, row, type) {
-      row.selected = !row.selected
-      console.log('父ID2===>:', row.id)
-      // this.p.push({
-      //   pid: row.id,
-      //   select: row.selected,
-      // });
-      // console.log("this.p", this.p);
-      children.forEach((item) => {
-        console.log('下级id===>:', item.id)
-        if (type == 'all') {
-          this.$refs.treeTableRef.toggleRowSelection(item, this.isSelectAll)
-        } else {
-          this.$refs.treeTableRef.toggleRowSelection(item, row.selected)
-        }
-        if (item.children) {
-          this.getChildren(item.children, item, type)
-        }
-      })
-    },
-    selectAll(row) {
-      this.isSelectAll = !this.isSelectAll
-      this.tableData.forEach((item) => {
-        if (item.children) {
-          this.getChildren(item.children, item, 'all')
-          this.$refs.treeTableRef.toggleRowExpansion(item, item.selected)
-        }
-      })
-      console.log('selectAll===>:', row)
-    }
-  }
+  methods: {}
 }
 </script>
 
 <style lang="scss" scoped>
-.tree-table {
-  background: #eee;
-}
 </style>
