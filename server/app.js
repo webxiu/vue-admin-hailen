@@ -10,16 +10,16 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 // 设置跨域限制
-app.all('*',(req,res,next) => {
+app.all('*', (req, res, next) => {
 
-    res.header("Access-Control-Allow-Origin","*");//设置允许跨域的域名，*代表允许任意域名跨域
-    res.header("Access-Control-Allow-Headers","content-type");//允许的header类型
-    res.header("Access-Control-Allow-Methods","DELETE,PUT,POST,GET,OPTIONS");//跨域允许的请求方式
-    // res.header("Content-Type","application/json;charset=utf-8");
-    if (req.method.toLowerCase() == 'options')
-        res.send(200);  //让options尝试请求快速结束
-    else
-        next();
+  res.header("Access-Control-Allow-Origin", "*");//设置允许跨域的域名，*代表允许任意域名跨域
+  res.header("Access-Control-Allow-Headers", "content-type");//允许的header类型
+  res.header("Access-Control-Allow-Methods", "DELETE,PUT,POST,GET,OPTIONS");//跨域允许的请求方式
+  // res.header("Content-Type","application/json;charset=utf-8");
+  if (req.method.toLowerCase() == 'options')
+    res.send(200);  //让options尝试请求快速结束
+  else
+    next();
 
 })
 
@@ -37,12 +37,12 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -52,9 +52,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-const port = process.env.PORT;
-app.listen(8888,res=>{
-    console.log('服务器已经启动...'+port);
+const port = process.env.PORT || 8888;
+app.listen(port, res => {
+  console.log('服务器已经启动...' + port);
 })
 
 module.exports = app;
