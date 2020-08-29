@@ -20,6 +20,12 @@ const treeRouter = {
       component: () => import('@/views/tree/custom'),
       name: 'CustomTree',
       meta: { title: '数据组合树' }
+    },
+    {
+      path: 'access',
+      component: () => import('@/views/tree/access'),
+      name: 'TreeAccess',
+      meta: { title: '权限树' }
     }
   ]
 }
