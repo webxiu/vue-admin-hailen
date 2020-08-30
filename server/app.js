@@ -2,22 +2,24 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var uploadRouter = require('./routes/upload');
 
 var app = express();
 
 // 设置跨域限制
 app.all('*', (req, res, next) => {
 
-  res.header("Access-Control-Allow-Origin", "*");//设置允许跨域的域名，*代表允许任意域名跨域
-  res.header("Access-Control-Allow-Headers", "content-type");//允许的header类型
-  res.header("Access-Control-Allow-Methods", "DELETE,PUT,POST,GET,OPTIONS");//跨域允许的请求方式
+  res.header("Access-Control-Allow-Origin", "*"); //设置允许跨域的域名，*代表允许任意域名跨域
+  res.header("Access-Control-Allow-Headers", "content-type"); //允许的header类型
+  res.header("Access-Control-Allow-Methods", "DELETE,PUT,POST,GET,OPTIONS"); //跨域允许的请求方式
   // res.header("Content-Type","application/json;charset=utf-8");
   if (req.method.toLowerCase() == 'options')
-    res.send(200);  //让options尝试请求快速结束
+    res.send(200); //让options尝试请求快速结束
   else
     next();
 
@@ -28,13 +30,32 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
+// app.use(cookieParser());
+// app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.json({
+  limit: '1024mb'
+}));
+app.use(bodyParser.urlencoded({
+  limit: '1024mb',
+  extended: false
+}));
+
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/upload', uploadRouter);
+
+
+// app.use(express.static('./'))
+// app.use((req, res) => {
+//   res.status(404)
+//   res.send('not found')
+// })
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

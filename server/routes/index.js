@@ -8,8 +8,18 @@ const sd = require('silly-datetime'); //时间处理
 let currentTime = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')
 
 //登录(单个查询)
+router.get('/', (req, res, next) => {
+    res.json({
+        a: 99999
+    })
+    next()
+})
+//登录(单个查询)
 router.post('/login', (req, res) => {
-    const { username, password } = req.body
+    const {
+        username,
+        password
+    } = req.body
     const sql = `select * from username where username='${username}' and password='${password}'`
     console.log('result:' + sql)
     connection.query(sql, (err, data) => {
@@ -22,10 +32,16 @@ router.post('/login', (req, res) => {
 
 //添加登录日志
 router.post('/log', (req, res) => {
-    const {username, type,handleType,ip,typeID} = req.body;
+    const {
+        username,
+        type,
+        handleType,
+        ip,
+        typeID
+    } = req.body;
     let currentTime = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')
-    
-    const sql = `insert into k_log (k_user,k_type,k_handleType,k_ip,k_date,k_typeId) values('${username}','${type}','${handleType}','${ip}','${currentTime}','${typeID?typeID:'-'}')`
+
+    const sql = `insert into k_log (k_user,k_type,k_handleType,k_ip,k_date,k_typeId) values('${username}','${type}','${handleType}','${ip}','${currentTime}','${typeID ? typeID : '-'}')`
     // console.log('result:' + sql)
     connection.query(sql, (err, data) => {
         if (err) throw err;
@@ -35,10 +51,13 @@ router.post('/log', (req, res) => {
 
 //获取日志数据
 router.get('/logs', function (req, res) {
-    let { page, size } = req.query;
+    let {
+        page,
+        size
+    } = req.query;
     let pageNum = (page - 1) * size;
     let resultData = {}
-    
+
     // 搜索+分页数据
     const countSQL = `SELECT COUNT(*) as sum FROM k_log`;
 
@@ -61,7 +80,11 @@ router.get('/logs', function (req, res) {
 
 //首页订单
 router.get('/order', function (req, res) {
-    let { page, size, search } = req.query;
+    let {
+        page,
+        size,
+        search
+    } = req.query;
     let pageNum = (page - 1) * size;
     let resultData = {}
     // 搜索+分页数据
@@ -85,7 +108,14 @@ router.get('/order', function (req, res) {
 
 //编辑订单
 router.post('/edit', (req, res) => {
-    let { w_id, w_username, w_phone, w_order_num, w_wl_status, w_address } = req.body;
+    let {
+        w_id,
+        w_username,
+        w_phone,
+        w_order_num,
+        w_wl_status,
+        w_address
+    } = req.body;
     //获取时间格式
     let modifyTime = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')
     let editSql = `update wn_order set w_username='${w_username}',w_phone='${w_phone}',w_order_num='${w_order_num}',w_wl_status='${w_wl_status}',w_address='${w_address}',w_import_date='${modifyTime}' where w_id=${w_id}`;
@@ -98,7 +128,13 @@ router.post('/edit', (req, res) => {
 
 //添加订单
 router.post('/add', (req, res) => {
-    let { w_username, w_phone, w_order_num, w_wl_status, w_address } = req.body;
+    let {
+        w_username,
+        w_phone,
+        w_order_num,
+        w_wl_status,
+        w_address
+    } = req.body;
     let addTime = sd.format(new Date(), "YYYY-MM-DD HH:mm:ss")
     let addSql = `insert into wn_order (w_username,w_phone,w_order_num,w_wl_status,w_address,w_import_date) values('${w_username}','${w_phone}','${w_order_num}','${w_wl_status}','${w_address}','${addTime}')`;
     connection.query(addSql, (err, data) => {
@@ -109,7 +145,9 @@ router.post('/add', (req, res) => {
 })
 //删除订单
 router.post('/delete', (req, res) => {
-    let { deleteId } = req.body;
+    let {
+        deleteId
+    } = req.body;
     let delSql = `delete FROM wn_order where w_id=${deleteId}`;
     connection.query(delSql, (err, data) => {
         if (err) throw err;
@@ -120,7 +158,12 @@ router.post('/delete', (req, res) => {
 
 //点赞
 router.get('/praise', (req, res) => {
-    let { theme, zan_num, theme_id, user_id } = req.query;
+    let {
+        theme,
+        zan_num,
+        theme_id,
+        user_id
+    } = req.query;
     let newTime = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')
     // console.log(66,theme,zan_num,theme_id,user_id)
     //根据文章id和用户id查询是否有点赞记录
@@ -131,7 +174,10 @@ router.get('/praise', (req, res) => {
         if (err) throw err;
         // 判断用户是否点过赞
         if (data[0] && data[0].status == 1 && data[0].user_id == user_id) {
-            res.json({ serverStatus: 0, msg: '您已经点过赞了' })
+            res.json({
+                serverStatus: 0,
+                msg: '您已经点过赞了'
+            })
         } else {
             // 更新点赞数量
             connection.query(zanInsert, (err, add) => {
@@ -150,7 +196,9 @@ router.get('/praise', (req, res) => {
 })
 //我的点赞
 router.get('/zan', (req, res) => {
-    let { user_id } = req.query;
+    let {
+        user_id
+    } = req.query;
     let zanQuery = `select * from k_praise where user_id='${user_id}' order by id desc`;
     connection.query(zanQuery, (err, zan) => {
         if (err) throw err;
@@ -159,10 +207,12 @@ router.get('/zan', (req, res) => {
 })
 //签到
 router.get('/signin', (req, res) => {
-    let { user_id } = req.query;
-    console.log(currentTime,user_id);
-    
-    
+    let {
+        user_id
+    } = req.query;
+    console.log(currentTime, user_id);
+
+
     let signinQuery = `select * from k_signin where user_id='${user_id}' order by id desc`;
     connection.query(signinQuery, (err, signin) => {
         if (err) throw err;
