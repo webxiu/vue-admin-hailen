@@ -9,7 +9,7 @@
       :show-file-list="false"
       :on-change="changeFile"
     >
-      <i class="el-icon-upload"></i>
+      <i class="el-icon-upload" />
       <div class="el-upload__text">
         将文件拖到此处，或
         <em>点击上传</em>
@@ -18,11 +18,11 @@
 
     <div class="progress">
       <div>上传进度:{{ total|totalText }}</div>
-      <el-link type="primary" v-if="total > 0 && total < 100" @click="handleBtn">{{ btn|btnText }}</el-link>
+      <el-link v-if="total > 0 && total < 100" type="primary" @click="handleBtn">{{ btn|btnText }}</el-link>
     </div>
 
-    <div class="uploadImg" v-if="video">
-      <video :src="video" controls></video>
+    <div v-if="video" class="uploadImg">
+      <video :src="video" controls />
     </div>
   </div>
 </template>
@@ -35,13 +35,6 @@ import { fileParse } from "@/utils/upload";
 
 export default {
   name: "BigFileUpload",
-  data() {
-    return {
-      total: 0,
-      video: null,
-      btn: false,
-    };
-  },
   filters: {
     btnText(btn) {
       return btn ? "继续" : "暂停";
@@ -49,6 +42,13 @@ export default {
     totalText(total) {
       return total > 100 ? 100 : total;
     },
+  },
+  data() {
+    return {
+      total: 0,
+      video: null,
+      btn: false,
+    };
   },
   methods: {
     // 解析为Buffer数据
@@ -63,21 +63,21 @@ export default {
     async changeFile(file) {
       if (!file) return;
       file = file.raw;
-      let buffer = await fileParse(file, "buffer"),
-        spark = new SparkMD5.ArrayBuffer(),
-        hash,
-        suffix;
+      const buffer = await fileParse(file, "buffer");
+      const spark = new SparkMD5.ArrayBuffer();
+      let hash;
+      let suffix;
       spark.append(buffer);
       hash = spark.end();
       suffix = /\.([0-9a-zA-Z]+)$/i.exec(file.name)[1];
 
       // 开始分片(创建100个切片)
-      let partList = [],
-        partsize = file.size / 100, //每份切片多大
-        cur = 0; //当前上传数量
+      const partList = [];
+      const partsize = file.size / 100; // 每份切片多大
+      let cur = 0; // 当前上传数量
 
       for (let i = 0; i < 100; i++) {
-        let item = {
+        const item = {
           chunk: file.slice(cur, cur + partsize),
           filename: `${hash}_${i}.${suffix}`,
         };
@@ -91,11 +91,11 @@ export default {
     },
     async sendRequest() {
       // 根据100个切片创建100个请求(集合)
-      let requestList = [];
+      const requestList = [];
       this.partList.forEach((item, index) => {
         // 每一个函数都发送一个切片请求
-        let fn = () => {
-          let formData = new FormData();
+        const fn = () => {
+          const formData = new FormData();
           formData.append("chunk", item.chunk);
           formData.append("filename", item.filename);
           return axios
@@ -116,8 +116,8 @@ export default {
       });
       // 传递: 并行/串行(此处使用串行)
       let i = 0;
-      let complete = async () => {
-        let result = await axios.get("merge", {
+      const complete = async () => {
+        const result = await axios.get("merge", {
           params: this.hash,
         });
         const data = result.data;
@@ -125,7 +125,7 @@ export default {
           this.video = data.path;
         }
       };
-      let send = async () => {
+      const send = async () => {
         if (i >= requestList.length) {
           // 都传完了, 叫后台合并
           // complete();
