@@ -4,14 +4,38 @@ var fs = require('fs');
 const {
     resolve
 } = require('path');
-const {
-    Z_FIXED
-} = require('zlib');
 var router = express.Router();
 
 let multiparty = require('multiparty'),
     uploadDir = `${__dirname}/upload`;
 
+function handleMultiparty(req, res, temp) {
+    return new Promise((resolve, reject) => {
+        // multiparty的配置
+        let options = {
+            maxFieldsSize: 200 * 1024 * 1024
+        };
+        !temp ? options.uploadDir = uploadDir : null
+        let form = new multiparty.Form(options)
+        // multiparty解析
+        form.parse(req, function (err, fields, files) {
+            if (err) {
+                res.send({
+                    code: 1,
+                    reason: err
+                })
+                reject(err)
+                return
+            }
+            resolve({
+                fields,
+                files
+            })
+
+        })
+    })
+
+}
 //登录(单个查询)
 router.get('/', (req, res, next) => {
     res.json({
@@ -49,7 +73,6 @@ router.post('/single', function (req, res) {
 
 /* 分片上传 */
 router.post('/bigfile', async (req, res) => {
-    console.log('888', req, res)
     let {
         fields,
         files
@@ -57,7 +80,7 @@ router.post('/bigfile', async (req, res) => {
 
     let [chunk] = files.chunk,
         [filename] = fields.filename;
-    let hash = /\([0-9a-zA-Z]+)_\d+/.exec(filename)[1],
+    let hash = /([0-9a-zA-Z]+)_\d+/.exec(filename)[1],
         // suffix = /\.([0-9a-zA-Z]+)$/.exec(file.name)[1],
         path = `${uploadDir}/${hash}`;
     !fs.existsSync(path) ? fs.mkdirSync(path) : null;
@@ -65,7 +88,7 @@ router.post('/bigfile', async (req, res) => {
     fs.access(path, async (err) => {
         // 存在的则不在进行任何处理
         if (!err) {
-            res.end({
+            res.send({
                 code: 0,
                 path: path.replace(__dirname, `http://127.0.0.1:8888`),
             })
@@ -83,10 +106,11 @@ router.post('/bigfile', async (req, res) => {
         readStream.pipe(writeStream);
         readStream.on('end', function () {
             fs.unlinkSync(chunk.path);
-            fs.send({
+            res.send({
                 code: 0,
                 path: path.replace(__dirname, `http://127.0.0.1:8888`),
             })
+            return
         })
     })
 });
@@ -95,8 +119,7 @@ router.get('/merge', (req, res) => {
     let {
         hash
     } = req.query;
-
-
+    console.log('hash', hash)
     let path = `${uploadDir}/${hash}`,
         fileList = fs.readdirSync(path),
         suffix;
@@ -105,14 +128,14 @@ router.get('/merge', (req, res) => {
         return reg.exec(a)[1] - reg.exec(b)[1]
     }).forEach(item => {
         !suffix ? suffix = /\.([0-9a-zA-Z]+)$/.exec(item)[1] : null;
-        fs.appendFileSync(`${uploadDir}/${hash}.${suffix}`, fs.readdirSync(`${path}/${item}`))
+        fs.appendFileSync(`${uploadDir}/${hash}.${suffix}`, fs.readFileSync(`${path}/${item}`))
         fs.unlinkSync(`${path}/${item}`)
     })
 
     fs.rmdirSync(path)
-    fs.send({
+    res.send({
         code: 0,
-        path: path.replace(__dirname, `http://127.0.0.1:8888/upload/${hash}.${suffix}`),
+        path: `http://127.0.0.1:8888/upload/${hash}.${suffix}`
     })
 
 });

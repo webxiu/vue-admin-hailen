@@ -36,7 +36,17 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    before: require('./mock/mock-server.js'),
+    // '/api': {
+    //   target: 'http://localhost:8080', //你要跨域的网址  比如  'http://news.baidu.com',
+    //   // secure: true, // 如果是https接口，需要配置这个参数
+    //   changeOrigin: true, //这个参数是用来回避跨站问题的，配置完之后发请求时会自动修改http header里面的host，但是不会修改别的
+    //   pathRewrite: {
+    //     '^/api': '/api' //路径的替换规则
+    //     //这里的配置是正则表达式，以/api开头的将会被用用‘/api’替换掉，假如后台文档的接口是 /api/list/xxx
+    //     //前端api接口写：axios.get('/api/list/xxx') ， 被处理之后实际访问的是：http://news.baidu.com/api/list/xxx
+    //   }
+    // }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
@@ -51,15 +61,13 @@ module.exports = {
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
     // it can improve the speed of the first screen, it is recommended to turn on preload
-    config.plugin('preload').tap(() => [
-      {
-        rel: 'preload',
-        // to ignore runtime.js
-        // https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/config/app.js#L171
-        fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
-        include: 'initial'
-      }
-    ])
+    config.plugin('preload').tap(() => [{
+      rel: 'preload',
+      // to ignore runtime.js
+      // https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/config/app.js#L171
+      fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
+      include: 'initial'
+    }])
 
     // when there are many pages, it will cause too many meaningless requests
     config.plugins.delete('prefetch')
@@ -88,7 +96,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+              // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()

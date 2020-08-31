@@ -114,11 +114,13 @@ export default {
 
         requestList.push(fn);
       });
-      // 传递: 并行/串行(此处使用串行)
+      // 传递: 并行/串行(此处使用串行, 可以基于标识控制不发送)
       let i = 0;
       const complete = async () => {
-        const result = await axios.get("merge", {
-          params: this.hash,
+        const result = await axios.get("http://127.0.0.1:8888/upload/merge", {
+          params: {
+            hash: this.hash,
+          },
         });
         const data = result.data;
         if (data.code === 0) {
@@ -126,9 +128,11 @@ export default {
         }
       };
       const send = async () => {
+        // 已经中断则不再上传
+        if (this.abort) return;
         if (i >= requestList.length) {
           // 都传完了, 叫后台合并
-          // complete();
+          complete();
           return;
         }
         await requestList[i]();
@@ -137,10 +141,26 @@ export default {
       };
       send();
     },
-    handleBtn() {},
+    handleBtn() {
+      if (this.btn) {
+        // 断点续传
+        this.btn = false;
+        this.abort = false;
+        this.sendRequest();
+        return;
+      }
+      // 暂停上传
+      this.btn = true;
+      this.abort = true;
+    },
   },
 };
 </script>
 
 <style lang="sass" scoped>
+.progress
+  background: #ccc
+  width: 500px
+  line-height: 40px
+  border-radius: 2px
 </style>
