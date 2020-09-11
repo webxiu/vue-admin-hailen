@@ -11,18 +11,32 @@ const chartsRouter = {
     title: 'CSS3',
     icon: 'chart'
   },
-  children: [
+  children: [{
+      path: 'magnifier',
+      component: () => import('@/views/css3/magnifier'),
+      name: 'ImageMagnifier',
+      meta: {
+        title: '图片放大镜',
+        noCache: true
+      }
+    },
     {
       path: 'animation',
       component: () => import('@/views/css3/animation'),
       name: 'CssAnimation',
-      meta: { title: 'CSS动画', noCache: true }
+      meta: {
+        title: 'CSS动画',
+        noCache: true
+      }
     },
     {
       path: 'style',
       component: () => import('@/views/css3/style'),
       name: 'CssStyle',
-      meta: { title: 'CSS样式', noCache: true }
+      meta: {
+        title: 'CSS样式',
+        noCache: true
+      }
     }
   ]
 }
