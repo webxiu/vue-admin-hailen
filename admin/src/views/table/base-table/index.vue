@@ -11,8 +11,8 @@
     >
       <template>
         <el-table-column label="插槽-右" width="80" fixed="right">
-          <template slot-scope="scope">
-            <el-button type="text" class="line" size="small" @click="clickHandle(scope.row)">查看</el-button>
+          <template slot-scope="{row, $index}">
+            <el-button type="text" class="line" size="small" @click="clickHandle(row, $index)">查看</el-button>
           </template>
         </el-table-column>
       </template>
@@ -22,6 +22,7 @@
 
 <script>
 import BaseTable from '@/components/BaseTable'
+import axios from 'axios'
 export default {
   name: 'Tables',
   components: { BaseTable },
@@ -87,11 +88,19 @@ export default {
   },
   mounted() {
     this.getTableData()
+    console.log('axios', axios.getRequest)
+  },
+  beforeRouteEnter(to, form, next) {
+    console.log('arguments', to, form, next)
+    next()
   },
   methods: {
     getTableData(page = 1, page_size = 10) {
       fetch(
-        'http://127.0.0.1/api/user.php?page=' + page + '&page_size=' + page_size
+        'http://192.168.1.102/api/user.php?page=' +
+          page +
+          '&page_size=' +
+          page_size
       )
         .then((res) => res.json())
         .then((res) => {
@@ -126,8 +135,8 @@ export default {
           ]
         })
     },
-    clickHandle(row) {
-      console.log(998, row)
+    clickHandle(row, index) {
+      console.log(998, row, index)
     },
     selectionChange(row) {
       console.log('选择框', row)

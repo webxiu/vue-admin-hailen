@@ -19,6 +19,12 @@ const componentsRouter = {
       meta: { title: '无限菜单' }
     },
     {
+      path: 'calendar',
+      component: () => import('@/views/components/calendar'),
+      name: 'Calendar',
+      meta: { title: '日历' }
+    },
+    {
       path: 'markdown',
       component: () => import('@/views/components/markdown'),
       name: 'MarkdownDemo',
