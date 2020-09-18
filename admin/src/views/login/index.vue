@@ -1,5 +1,22 @@
 <template>
   <div class="login-container">
+    <vue-particles
+      color="#fff"
+      :particle-opacity="0.7"
+      :particles-number="100"
+      shape-type="circle"
+      :particle-size="4"
+      lines-color="#384FFF"
+      :lines-width="1"
+      :line-linked="true"
+      :line-opacity="0.4"
+      :lines-distance="150"
+      :move-speed="3"
+      :hover-effect="true"
+      hover-mode="grab"
+      :click-effect="true"
+      click-mode="push"
+    />
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">

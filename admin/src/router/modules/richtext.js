@@ -20,7 +20,7 @@ const richtextRouter = {
     },
     {
       path: 'tinymce',
-      component: () => import('@/views/default/components-demo/tinymce'),
+      component: () => import('@/views/components/tinymce'),
       name: 'TinymceDemo',
       meta: { title: 'Tinymce', icon: 'education' }
     }
