@@ -6,12 +6,16 @@
     <div class="dot-container">
       <div class="dots" />
     </div>
+    <!-- 边框动画 -->
+    <Animate1 />
   </div>
 </template>
 
 <script>
+import Animate1 from './components/animate1'
 export default {
-  name: 'CssAnimation'
+  name: 'CssAnimation',
+  components: { Animate1 }
 }
 </script>
 
