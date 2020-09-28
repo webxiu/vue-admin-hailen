@@ -6,6 +6,8 @@
     <VerticalScroll />
     <div class="line">动态添加输入框:</div>
     <AddInput />
+    <div class="line">Canvas验证码:</div>
+    <AuthCode />
   </div>
 </template>
 
@@ -13,9 +15,10 @@
 import ByteDance from './components/ByteDance'
 import VerticalScroll from './components/VerticalScroll'
 import AddInput from './components/AddInput'
+import AuthCode from './components/AuthCode'
 export default {
   name: 'CssStyle',
-  components: { ByteDance, VerticalScroll, AddInput }
+  components: { ByteDance, VerticalScroll, AddInput, AuthCode }
 }
 </script>
 
