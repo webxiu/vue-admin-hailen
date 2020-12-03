@@ -8,25 +8,29 @@
     <Animate1 />
     <div class="title">影子滑动</div>
     <ShadowMove />
-    <div class="title">影子滑动</div>
+    <div class="title">加载心形动画</div>
     <LoadingHeart />
+    <div class="title">Three</div>
+    <Three />
   </div>
 </template>
 
 <script>
-import Animate1 from './components/animate1'
+import Animate1 from "./components/animate1";
 // import Rotate from './components/rotate';
-import ShadowMove from './components/shadow-move'
-import LoadingHeart from './components/LoadingHeart'
+import ShadowMove from "./components/shadow-move";
+import LoadingHeart from "./components/LoadingHeart";
+import Three from "./components/Three";
 export default {
-  name: 'CssAnimation',
+  name: "CssAnimation",
   components: {
     Animate1,
     // Rotate,
     ShadowMove,
-    LoadingHeart
+    LoadingHeart,
+    Three
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
