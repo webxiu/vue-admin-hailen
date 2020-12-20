@@ -7,10 +7,10 @@
       class="img-uploader-preview"
     >
       <div class="preview-img">
-        <img :src="data" />
+        <img :src="data">
       </div>
       <!--标题横条-->
-      <div class="img-uploader-mask" v-if="hasImages">
+      <div v-if="hasImages" class="img-uploader-mask">
         <!--<p class="img-uploader-file-size">10MB</p>-->
         <div class="progrss">
           <!-- 图片标题 -->
@@ -28,8 +28,8 @@
           <p
             class="progrss-bar"
             :style="{ width: fileNameList[index].progress + '%' }"
-          ></p>
-          <p class="progrss-percent" v-if="fileNameList[index].progress">
+          />
+          <p v-if="fileNameList[index].progress" class="progrss-percent">
             {{ fileNameList[index].progress }}%
           </p>
         </div>
@@ -38,40 +38,40 @@
         src="../../assets/round_close.svg"
         class="img-uploader-delete-btn"
         @click="deleteImg(fileNameList[index].cancel, index)"
-      />
+      >
     </div>
 
     <!-- 添加 -->
     <div
-      class="img-uploader"
-      @drop="handleDrop"
       ref="uploader"
+      class="img-uploader"
       placeholder="选择或拖放图片"
+      @drop="handleDrop"
     >
       <!--没有图片显示点击上传-->
       <p class="img-uploader-placeholder">选择或拖放图片</p>
 
-      <label :for="inputId" class="img-uploader-label"></label>
+      <label :for="inputId" class="img-uploader-label" />
 
       <!-- input-->
       <input
-        style="display: none"
         :id="inputId"
         ref="input"
+        style="display: none"
         type="file"
         accept="image/gif, image/jpeg, image/jpg, image/png, image/svg"
         multiple="multiple"
         @change="handleFileChange"
         @click="openInput()"
-      />
+      >
 
       <!--错误提示-->
-      <div class="img-uploader-error" v-if="errorText.length">
+      <div v-if="errorText.length" class="img-uploader-error">
         {{ errorText }}
       </div>
 
       <!--文件数-->
-      <div class="img-uploader-count" v-if="fileNameList.length">
+      <div v-if="fileNameList.length" class="img-uploader-count">
         {{ fileNameList.length }}
       </div>
     </div>
@@ -82,226 +82,226 @@
 
 <script>
 // *******************拖入 + 点击提交*********************************
-import resizeImage from "./resize";
-import axios from "axios";
+import resizeImage from './resize'
+import axios from 'axios'
 
-const CancelToken = axios.CancelToken;
-let cancel;
+const CancelToken = axios.CancelToken
+let cancel
 export default {
-  name: "KuaActivity",
+  name: 'KuaActivity',
   props: {
     maxSize: {
-      default: 10485760, //10M
+      default: 10485760, // 10M
       type: Number
     }
   },
   data() {
     return {
       // input 的id
-      inputId: "",
-      //提交上传的图片
+      inputId: '',
+      // 提交上传的图片
       files: [],
-      //进度条
+      // 进度条
       progress: [],
       // 预览图片地址
       imageDataList: [],
       // 文件名
       fileNameList: [],
       // 错误提示
-      errorText: ""
-    };
+      errorText: ''
+    }
   },
   computed: {
     // 是否有图片
     hasImages() {
-      //图片数量
-      return this.imageDataList.length > 0;
+      // 图片数量
+      return this.imageDataList.length > 0
     }
   },
   mounted() {
     this.inputId = this.id || Math.floor(Math.random() * 100000);
     // console.log(this.inputId)
-    ["drop", "dragenter", "dragover", "dragleave"].forEach(eventName => {
-      this.preventDefaultEvent(eventName);
-    });
+    ['drop', 'dragenter', 'dragover', 'dragleave'].forEach(eventName => {
+      this.preventDefaultEvent(eventName)
+    })
   },
   methods: {
-    //阻止默认事件
+    // 阻止默认事件
     preventDefaultEvent(eventName) {
-      console.log(eventName);
+      console.log(eventName)
       document.addEventListener(
         eventName,
         function(e) {
-          e.preventDefault();
+          e.preventDefault()
         },
         false
-      );
+      )
     },
-    //点击上传
+    // 点击上传
     handleFileChange() {
-      this.errorText = ""; //清空错误提示
-      let input = this.$refs.input;
-      let files = input.files;
-      this.handFile(files);
+      this.errorText = '' // 清空错误提示
+      const input = this.$refs.input
+      const files = input.files
+      this.handFile(files)
       // console.log('点击获取', files);
     },
-    //拖动上传
+    // 拖动上传
     handleDrop(e) {
-      let files = e.dataTransfer.files;
-      this.handFile(files); //图片信息
+      const files = e.dataTransfer.files
+      this.handFile(files) // 图片信息
       // console.log('拖动获取', files);
     },
-    //点击&拖动执行的公共方法
+    // 点击&拖动执行的公共方法
     handFile(files) {
-      //遍历图片信息
+      // 遍历图片信息
       for (let i = 0; i < files.length; i++) {
-        //接收图片信息
-        let imgObj = {};
-        let size = files[i].size; //字节
+        // 接收图片信息
+        const imgObj = {}
+        const size = files[i].size // 字节
 
         if (!/image\/\w+/.test(files[i].type)) {
-          this.errorText = `Error,文件类型错误!`;
-          return false;
+          this.errorText = `Error,文件类型错误!`
+          return false
         }
 
         if (size > this.maxSize) {
-          this.errorText = `文件大小不能超过${this.sizeFomate()}`;
-          return false;
+          this.errorText = `文件大小不能超过${this.sizeFomate()}`
+          return false
         }
         // console.log('上传格式',files)
-        //给提交做准备
-        this.files.push(files[i]);
+        // 给提交做准备
+        this.files.push(files[i])
 
-        //需要格式化处理
-        imgObj.uid = new Date().getTime(); //id
-        imgObj.name = files[i].name; //文件名
-        imgObj.size = this.fileFomate(size); //文件大小
+        // 需要格式化处理
+        imgObj.uid = new Date().getTime() // id
+        imgObj.name = files[i].name // 文件名
+        imgObj.size = this.fileFomate(size) // 文件大小
         imgObj.mTime =
           files[i].lastModifiedDate.toLocaleDateString() +
-          " " +
-          files[i].lastModifiedDate.toTimeString().split(" ")[0];
+          ' ' +
+          files[i].lastModifiedDate.toTimeString().split(' ')[0]
 
-        console.log("图片参数", files);
+        console.log('图片参数', files)
 
-        //循环填入图片信息
-        this.fileNameList.push(imgObj);
+        // 循环填入图片信息
+        this.fileNameList.push(imgObj)
       }
 
-      this.preview(files);
+      this.preview(files)
     },
     // 获取图片的url
     preview(files) {
-      let _this = this;
-      if (!files || !window.FileReader) return;
+      const _this = this
+      if (!files || !window.FileReader) return
       for (let i = 0; i < files.length; i++) {
-        let file = files[i];
-        let reader = new FileReader();
+        const file = files[i]
+        const reader = new FileReader()
         reader.onload = function(e) {
           // console.log(888888,e.target.result)
           // _this.imageDataList.push(e.target.result);
           resizeImage(e.target.result, 150, 150, function(result) {
-            _this.imageDataList.push(result);
-          });
-        };
-        reader.readAsDataURL(file);
+            _this.imageDataList.push(result)
+          })
+        }
+        reader.readAsDataURL(file)
       }
     },
 
-    //文件大小不能超多少
+    // 文件大小不能超多少
     sizeFomate() {
-      let result = 0;
+      let result = 0
       if (this.maxSize < 102400) {
-        result = this.maxSize + "KB";
+        result = this.maxSize + 'KB'
       } else {
-        result = (this.maxSize / 1024 / 1024).toFixed(1) + "M";
+        result = (this.maxSize / 1024 / 1024).toFixed(1) + 'M'
       }
-      return result;
+      return result
     },
-    //保留2位小数,不四舍五入
+    // 保留2位小数,不四舍五入
     fomate(data) {
-      let twoFixed = data.toFixed(3);
-      return twoFixed.substring(0, twoFixed.length - 2);
+      const twoFixed = data.toFixed(3)
+      return twoFixed.substring(0, twoFixed.length - 2)
     },
-    //文件大小单位转换
+    // 文件大小单位转换
     fileFomate(file) {
-      //传入字节
-      //计算文件大小
-      let kb = file / 1024;
-      let mb = kb / 1024;
-      let gb = mb / 1024;
-      let size;
+      // 传入字节
+      // 计算文件大小
+      const kb = file / 1024
+      const mb = kb / 1024
+      const gb = mb / 1024
+      let size
       if (kb > 1 && kb < 1024) {
-        return this.fomate(kb) + "KB";
+        return this.fomate(kb) + 'KB'
       } else if (mb >= 1 && mb < 1024) {
-        return this.fomate(mb) + "M";
+        return this.fomate(mb) + 'M'
       } else if (gb > 1 && gb < 1024) {
-        return this.fomate(gb) + "G";
+        return this.fomate(gb) + 'G'
       } else {
-        return file + "字节";
+        return file + '字节'
       }
     },
-    //删除图片
+    // 删除图片
     deleteImg(cancel, index) {
-      console.log(99999, this.fileNameList);
-      this.imageDataList.splice(index, 1); //删图片url
-      this.fileNameList.splice(index, 1); //删图片信息
-      cancel();
+      console.log(99999, this.fileNameList)
+      this.imageDataList.splice(index, 1) // 删图片url
+      this.fileNameList.splice(index, 1) // 删图片信息
+      cancel()
     },
     openInput() {
-      this.errorText = "";
+      this.errorText = ''
     },
-    //提交上传
+    // 提交上传
     uploading() {
-      let _this = this;
+      const _this = this
       if (this.fileNameList.length == 0 && this.imageDataList.length == 0) {
-        this.errorText = "您还没有上传图片";
-        return false;
+        this.errorText = '您还没有上传图片'
+        return false
       }
-      //遍历图片流
+      // 遍历图片流
       // let fd = new FormData();
       this.files.forEach((item, i) => {
-        //单例模式
+        // 单例模式
         var Dragfiles = (function() {
-          var instance;
+          var instance
           return function() {
             if (!instance) {
-              instance = new FormData();
+              instance = new FormData()
             }
-            return instance;
-          };
-        })();
-        fd = Dragfiles();
-        var fd = new FormData();
+            return instance
+          }
+        })()
+        fd = Dragfiles()
+        var fd = new FormData()
         // fd.append("file" + i, item);
-        fd.append("file", item);
+        fd.append('file', item)
         axios
           .request({
-            url: "http://localhost/html/kjb/upload.php",
-            method: "post",
+            url: 'http://localhost/html/kjb/upload.php',
+            method: 'post',
             data: fd,
-            headers: { "Content-Type": "multipart/form-data" },
+            headers: { 'Content-Type': 'multipart/form-data' },
             cancelToken: new CancelToken(c => {
-              cancel = c;
-              this.fileNameList[i].cancel = c;
+              cancel = c
+              this.fileNameList[i].cancel = c
             }),
             onUploadProgress: e => {
-              let progress = e.total
+              const progress = e.total
                 ? Math.floor((e.loaded / e.total) * 100)
-                : 0;
-              this.$set(this.fileNameList[i], "progress", progress);
-              console.log("progress", e);
+                : 0
+              this.$set(this.fileNameList[i], 'progress', progress)
+              console.log('progress', e)
             }
           })
           .then(res => {
-            console.log("res===", res);
-          });
-      });
+            console.log('res===', res)
+          })
+      })
     },
     cancelHandle() {
-      cancel();
+      cancel()
     }
   }
-};
+}
 </script>
 
 <style scoped>

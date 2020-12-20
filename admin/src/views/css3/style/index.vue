@@ -14,15 +14,15 @@
 </template>
 
 <script>
-import ByteDance from "./components/ByteDance";
-import VerticalScroll from "./components/VerticalScroll";
-import AddInput from "./components/AddInput";
-import AuthCode from "./components/AuthCode";
-import Progress from "./components/Progress";
+import ByteDance from './components/ByteDance'
+import VerticalScroll from './components/VerticalScroll'
+import AddInput from './components/AddInput'
+import AuthCode from './components/AuthCode'
+import Progress from './components/Progress'
 export default {
-  name: "CssStyle",
+  name: 'CssStyle',
   components: { ByteDance, VerticalScroll, AddInput, AuthCode, Progress }
-};
+}
 </script>
 
 <style lang="scss" scoped>

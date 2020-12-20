@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  name: 'ShadowMove'
-}
+  name: "ShadowMove"
+};
 </script>
 
 <style lang="scss" scoped>
@@ -31,7 +31,7 @@ export default {
     overflow: hidden;
     z-index: 6;
     background: linear-gradient(
-      left,
+      to left,
       rgba(255, 255, 255, 0) 0,
       rgba(255, 255, 255, 0.4) 50%,
       rgba(255, 255, 255, 0) 100%
