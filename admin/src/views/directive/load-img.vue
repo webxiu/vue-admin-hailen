@@ -2,6 +2,8 @@
   <div class="container">
     <div v-for="(item, index) in imgSrc" :key="index">
       <img v-imgLazy="item" class="img">
+      <!-- 下面的不生效 -->
+      <!-- <img v-imgLazy2="item" class="img" /> -->
     </div>
   </div>
 </template>
