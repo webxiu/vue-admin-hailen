@@ -17,8 +17,13 @@
     </el-upload>
 
     <div class="progress">
-      <div>上传进度:{{ total|totalText }}</div>
-      <el-link v-if="total > 0 && total < 100" type="primary" @click="handleBtn">{{ btn|btnText }}</el-link>
+      <div>上传进度:{{ total | totalText }}</div>
+      <el-link
+        v-if="total > 0 && total < 100"
+        type="primary"
+        @click="handleBtn"
+        >{{ btn | btnText }}</el-link
+      >
     </div>
 
     <div v-if="video" class="uploadImg">
@@ -81,6 +86,7 @@ export default {
           chunk: file.slice(cur, cur + partsize),
           filename: `${hash}_${i}.${suffix}`,
         };
+        console.log(`item`, item);
         cur += partsize;
         partList.push(item);
       }

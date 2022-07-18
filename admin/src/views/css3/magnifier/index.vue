@@ -15,13 +15,13 @@ import tabbar from '@/components/Tabbar.vue';
         <img
           ref="img"
           src="~@/assets/small.jpg"
-          alt="妙味课堂 - 放大镜图片一"
+          alt="放大镜图片一"
           longdesc="http://www.miaov.com"
         />
       </div>
 
       <div ref="big_pic" class="big_pic" v-show="isShow">
-        <img src="~@/assets/small.jpg" alt="妙味课堂 - 放大镜图片二" longdesc="http://www.miaov.com" />
+        <img src="~@/assets/small.jpg" alt="放大镜图片二" longdesc="http://www.miaov.com" />
       </div>
     </div>
   </div>
