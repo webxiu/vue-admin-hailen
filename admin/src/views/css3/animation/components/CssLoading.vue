@@ -1,9 +1,10 @@
 <template>
+  <!-- 约束在内部 -->
   <div class="css-loading">
-  <div class="dot-container">
-    <div class="dots" />
-  </div> 
+    <div class="dot-container">
+      <div class="dots" />
     </div> 
+  </div> 
 </template>
 
 <script> 
@@ -13,6 +14,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// body,
+// html {
+//   overflow: hidden;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+// html {
+//   width: 100%;
+//   height: 100%;
+//   background: linear-gradient(rgba($base-bg, 0.9), rgba($base-bg, 0.9)),
+//     url(https://images.unsplash.com/reserve/0y86gz4sT4O2ZQJIRWXE_IMG_0476.JPG?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=&bg=);
+//   background-color: $base-bg;
+//   background-size: cover;
+//   background-blend-mode: normal, luminosity;
+//   mix-blend-mode: multiply;
+// }
+
 $base-bg: #f3f3f3;
 $bgColor: #fff;
 $n: 8;
@@ -48,25 +68,6 @@ $bgPosList: 40% 50%, 43% 43%, 50% 40%, 57% 43%, 60% 50%, 57% 57%, 50% 60%,
     background-position: $bgPosList;
   }
 }
-
-// body,
-// html {
-//   overflow: hidden;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
-
-// html {
-//   width: 100%;
-//   height: 100%;
-//   background: linear-gradient(rgba($base-bg, 0.9), rgba($base-bg, 0.9)),
-//     url(https://images.unsplash.com/reserve/0y86gz4sT4O2ZQJIRWXE_IMG_0476.JPG?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=&bg=);
-//   background-color: $base-bg;
-//   background-size: cover;
-//   background-blend-mode: normal, luminosity;
-//   mix-blend-mode: multiply;
-// }
 .css-loading{
   position: relative;
   height: 600px;

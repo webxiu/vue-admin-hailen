@@ -4,6 +4,8 @@
     <ByteDance />
     <div class="line">鼠标滚动左右滑动:</div>
     <VerticalScroll />
+    <div class="line">进度:</div>
+    <Progress />
     <div class="line">动态添加输入框:</div>
     <AddInput />
     <div class="line">Canvas验证码:</div>
@@ -16,9 +18,10 @@ import ByteDance from './components/ByteDance'
 import VerticalScroll from './components/VerticalScroll'
 import AddInput from './components/AddInput'
 import AuthCode from './components/AuthCode'
+import Progress from './components/Progress'
 export default {
   name: 'CssStyle',
-  components: { ByteDance, VerticalScroll, AddInput, AuthCode }
+  components: { ByteDance, VerticalScroll, AddInput, AuthCode, Progress }
 }
 </script>
 
